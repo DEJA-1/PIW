@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mocna księga</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<header>
+    <h1>Mocna księga</h1>
+    <div class="header-buttons">
+        <button class="header-button" id="login-btn">Zaloguj</button>
+        <button class="header-button" id="cart-btn">Koszyk</button>
+    </div>
+</header>
+
+<input type="text" id="search" placeholder="Szukaj książek...">
+<main>
+    <aside class="filters">
+        <select id="category-filter">
+            <option value="all">Wszystkie kategorie</option>
+            <option value="fiction">Fikcja</option>
+            <option value="non-fiction">Non-fiction</option>
+            <option value="fantasy">Fantastyka</option>
+            <option value="science">Nauka</option>
+        </select>
+
+        <select id="pages-filter">
+            <option value="all">Wszystkie strony</option>
+            <option value="0-100">0-100 stron</option>
+            <option value="100-300">100-300 stron</option>
+            <option value="300+">300+ stron</option>
+        </select>
+
+        <select id="cover-filter">
+            <option value="all">Wszystkie okładki</option>
+            <option value="soft">Miękka</option>
+            <option value="hard">Twarda</option>
+        </select>
+
+        <h4>Cena</h4>
+        <input type="range" id="price-range" min="0" max="200" step="10">
+
+        <h4>Popularne</h4>
+        <label><input type="checkbox" value="author1"> Autor 1</label><br>
+        <label><input type="checkbox" value="author2"> Autor 2</label><br>
+        <label><input type="checkbox" value="author3"> Autor 3</label>
+    </aside>
+
+    <section id="book-list">
+        <ul>
+            <li class="book-item">
+                <img src="https://via.placeholder.com/100" alt="Okładka książki">
+                <div class="book-details">
+                    <strong>Autor - Tytuł Książki 1</strong>
+                    <p class="book-description">Krótki opis książki, jedno lub dwa zdania tekstu, które informują czytelnika o treści.</p>
+                </div>
+                <span class="book-price">49.99 zł</span>
+            </li>
+            <li class="book-item">
+                <img src="https://via.placeholder.com/100" alt="Okładka książki">
+                <div class="book-details">
+                    <strong>Autor - Tytuł Książki 2</strong>
+                    <p class="book-description">Krótki opis książki, jedno lub dwa zdania tekstu, które informują czytelnika o treści.</p>
+                </div>
+                <span class="book-price">49.99 zł</span>
+            </li>
+            <li class="book-item">
+                <img src="https://via.placeholder.com/100" alt="Okładka książki">
+                <div class="book-details">
+                    <strong>Autor - Tytuł Książki 3</strong>
+                    <p class="book-description">Krótki opis książki, jedno lub dwa zdania tekstu, które informują czytelnika o treści.</p>
+                </div>
+                <span class="book-price">49.99 zł</span>
+            </li>
+        </ul>
+    </section>
+</main>
+</body>
+</html>
