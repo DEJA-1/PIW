@@ -10,11 +10,11 @@ let elementToDelete = null;
 function initializeTodoApp() {
     const taskInput = document.getElementById("taskInput");
     const addTaskBtn = document.getElementById("addTaskBtn");
-    const taskList = document.getElementById("taskList");
     const errorMessage = document.getElementById("errorMessage");
+    const listSelector = document.getElementById("listSelector");
 
     addTaskBtn.addEventListener("click", () =>
-        handleAddTask(taskInput, taskList, errorMessage)
+        handleAddTask(taskInput, errorMessage, listSelector)
     );
 
     taskInput.addEventListener("input", () =>
@@ -23,20 +23,37 @@ function initializeTodoApp() {
 
     initializeModal();
     initializeUndoShortcut();
+    initializeListToggles();
 }
 
-function handleAddTask(inputElement, listElement, errorMessage) {
-    const taskText = inputElement.value.trim();
+function initializeListToggles() {
+    const headers = document.querySelectorAll(".list-header");
 
+    headers.forEach(header => {
+        header.style.cursor = "pointer";
+        header.addEventListener("click", () => {
+            const list = header.nextElementSibling;
+            list.classList.toggle("collapsed");
+        });
+    });
+}
+
+function handleAddTask(inputElement, errorMessage, listSelector) {
+    const taskText = inputElement.value.trim();
     if (!taskText) {
         showValidationError(inputElement, errorMessage);
         return;
     }
 
+    const selectedListId = listSelector.value;
+    const selectedList = document.querySelector(`.todo-list[data-id="${selectedListId}"] ul`);
+
     const taskItem = createTaskItem(taskText);
-    listElement.appendChild(taskItem);
+    selectedList.appendChild(taskItem);
+
     inputElement.value = "";
     clearValidationError(inputElement, errorMessage);
+    updateListCounts();
 }
 
 function createTaskItem(text) {
@@ -105,6 +122,22 @@ function clearValidationError(inputElement, messageElement) {
     messageElement.hidden = true;
 }
 
+function updateListCounts() {
+    const allLists = document.querySelectorAll(".todo-list");
+
+    allLists.forEach(list => {
+        const ul = list.querySelector("ul");
+        const count = ul.querySelectorAll("li").length;
+
+        const header = list.querySelector(".list-header");
+        const countSpan = header.querySelector(".count");
+
+        if (countSpan) {
+            countSpan.textContent = `(${count})`;
+        }
+    });
+}
+
 let modalElement, modalText, confirmDeleteBtn, cancelDeleteBtn;
 
 function initializeModal() {
@@ -137,6 +170,7 @@ function confirmDeletion() {
         };
         elementToDelete.remove();
     }
+    updateListCounts();
     closeModal();
 }
 
@@ -159,5 +193,6 @@ function undoLastDeletion() {
             parent.appendChild(element);
         }
         lastDeleted = null;
+        updateListCounts();
     }
 }

@@ -7,6 +7,16 @@
 </head>
 <body>
 <h1>Mocna lista</h1>
+
+<div class="selector-container">
+    <label for="listSelector">Wybierz listę:</label>
+    <select id="listSelector">
+        <option value="pilne">Pilne</option>
+        <option value="malo-pilne">Mało pilne</option>
+        <option value="na-wczoraj">Na wczoraj</option>
+    </select>
+</div>
+
 <div class="input-container">
     <input type="text" id="taskInput" placeholder="Wpisz zadanie">
     <button id="addTaskBtn">Dodaj</button>
@@ -14,7 +24,20 @@
 <p id="errorMessage" class="error-message" hidden>Pole nie może być puste</p>
 <ul id="taskList"></ul>
 
-<script src="script.js"></script>
+<div id="todoListsContainer">
+    <div class="todo-list" data-id="pilne">
+        <h2 class="list-header" data-id="pilne">Pilne <span class="count">(0)</span></h2>
+        <ul class="task-list"></ul>
+    </div>
+    <div class="todo-list" data-id="malo-pilne">
+        <h2 class="list-header" data-id="malo-pilne">Mało pilne <span class="count">(0)</span></h2>
+        <ul class="task-list"></ul>
+    </div>
+    <div class="todo-list" data-id="na-wczoraj">
+        <h2 class="list-header" data-id="na-wczoraj">Na wczoraj <span class="count">(0)</span></h2>
+        <ul class="task-list"></ul>
+    </div>
+</div>
 
 <div id="modal" class="modal" style="display: none">
     <div class="modal-content">
@@ -26,5 +49,7 @@
         </div>
     </div>
 </div>
+
+<script src="script.js"></script>
 </body>
 </html>
