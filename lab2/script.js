@@ -21,9 +21,9 @@ function initializeTodoApp() {
         clearValidationError(taskInput, errorMessage)
     );
 
+    initializeListToggles();
     initializeModal();
     initializeUndoShortcut();
-    initializeListToggles();
 }
 
 function initializeListToggles() {
@@ -138,13 +138,13 @@ function updateListCounts() {
     });
 }
 
-let modalElement, modalText, confirmDeleteBtn, cancelDeleteBtn;
+let modalElement, modalText
 
 function initializeModal() {
     modalElement = document.getElementById("modal");
     modalText = document.getElementById("modalText");
-    confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
-    cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+    const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+    const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
 
     confirmDeleteBtn.addEventListener("click", confirmDeletion);
     cancelDeleteBtn.addEventListener("click", closeModal);
