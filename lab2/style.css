@@ -1,0 +1,108 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: var(--background);
+}
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+:root {
+    --background: #F8F9FA;
+    --background-shadow: #F1F2F3;
+    --text: #1A252F;
+    --subtitle: #5D6D7E;
+    --blue-accent: #3498DB;
+    --orange-accent: #E67E22;
+    --pastel-purple: #A29BFE;
+    --neutral-gray: #BDC3C7;
+    --mint-green: #2ecc71;
+    --dark-mint-green: #27AE60;
+    --dark-blue-accent: #2178C3;
+    --soft-error: #E57373;
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    align-items: start;
+}
+
+input[type="text"] {
+    flex: 3;
+    padding: 10px;
+    font-size: 16px;
+    display: block;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid var(--mint-green);
+    background-color: var(--mint-green);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--dark-mint-green);
+    border-color: var(--dark-mint-green);
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+li {
+    background-color: white;
+    border: 1px solid var(--blue-accent);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    color: var(--text);
+    font-size: 16px;
+    box-shadow: 0 2px 4px var(--background-shadow);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+li:hover {
+    background-color: var(--background-shadow);
+    cursor: pointer;
+}
+
+li.done {
+    text-decoration: line-through;
+    color: var(--subtitle);
+    font-style: italic;
+    position: relative;
+    border: 1px solid var(--dark-mint-green);
+}
+
+li.done::after {
+    content: attr(data-completed);
+    font-size: 12px;
+    color: var(--subtitle);
+    position: absolute;
+    right: 10px;
+    bottom: 8px;
+}
+
+input.input-error {
+    border-color: var(--soft-error);
+}
+
+.error-message {
+    color: var(--soft-error);
+    font-size: 14px;
+    margin-top: 5px;
+}
