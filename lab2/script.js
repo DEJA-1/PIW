@@ -4,35 +4,60 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeTodoApp();
 });
 
+let lastDeleted = null;
+let elementToDelete = null;
+
 function initializeTodoApp() {
     const taskInput = document.getElementById("taskInput");
     const addTaskBtn = document.getElementById("addTaskBtn");
     const taskList = document.getElementById("taskList");
+    const errorMessage = document.getElementById("errorMessage");
 
-    addTaskBtn.addEventListener("click", () => handleAddTask(taskInput, taskList));
+    addTaskBtn.addEventListener("click", () =>
+        handleAddTask(taskInput, taskList, errorMessage)
+    );
+
+    taskInput.addEventListener("input", () =>
+        clearValidationError(taskInput, errorMessage)
+    );
+
+    initializeModal();
+    initializeUndoShortcut();
 }
 
-function handleAddTask(inputElement, listElement) {
-    const errorMessage = document.getElementById("errorMessage");
+function handleAddTask(inputElement, listElement, errorMessage) {
     const taskText = inputElement.value.trim();
 
     if (!taskText) {
-        inputElement.classList.add("input-error");
-        errorMessage.hidden = false;
+        showValidationError(inputElement, errorMessage);
         return;
     }
-
-    inputElement.classList.remove("input-error");
-    errorMessage.hidden = true;
 
     const taskItem = createTaskItem(taskText);
     listElement.appendChild(taskItem);
     inputElement.value = "";
+    clearValidationError(inputElement, errorMessage);
 }
 
 function createTaskItem(text) {
     const li = document.createElement("li");
-    li.textContent = text;
+
+    const content = document.createElement("div");
+    content.classList.add("task-content");
+
+    const textNode = document.createElement("span");
+    textNode.textContent = text;
+
+    const dateSpan = document.createElement("span");
+    dateSpan.classList.add("date");
+
+    content.appendChild(textNode);
+    content.appendChild(dateSpan);
+
+    const deleteBtn = createDeleteButton(() => openModal(li, text));
+
+    li.appendChild(content);
+    li.appendChild(deleteBtn);
 
     li.addEventListener("click", () => toggleTaskCompletion(li));
 
@@ -40,16 +65,99 @@ function createTaskItem(text) {
 }
 
 function toggleTaskCompletion(taskElement) {
+    const content = taskElement.querySelector(".task-content");
+    const dateSpan = content.querySelector(".date");
+
     taskElement.classList.toggle("done");
 
     if (taskElement.classList.contains("done")) {
         const completedAt = formatDate(new Date());
-        taskElement.setAttribute("data-completed", `✓ ${completedAt}`);
+        dateSpan.textContent = `✓ ${completedAt}`;
+        content.classList.add("expanded");
     } else {
-        taskElement.removeAttribute("data-completed");
+        dateSpan.textContent = "";
+        content.classList.remove("expanded");
     }
 }
 
 function formatDate(date) {
     return date.toLocaleString("pl-PL");
+}
+
+function createDeleteButton(onClick) {
+    const btn = document.createElement("button");
+    btn.textContent = "✖";
+    btn.classList.add("delete-btn");
+    btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        onClick();
+    });
+    return btn;
+}
+
+function showValidationError(inputElement, messageElement) {
+    inputElement.classList.add("input-error");
+    messageElement.hidden = false;
+}
+
+function clearValidationError(inputElement, messageElement) {
+    inputElement.classList.remove("input-error");
+    messageElement.hidden = true;
+}
+
+let modalElement, modalText, confirmDeleteBtn, cancelDeleteBtn;
+
+function initializeModal() {
+    modalElement = document.getElementById("modal");
+    modalText = document.getElementById("modalText");
+    confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+    cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+
+    confirmDeleteBtn.addEventListener("click", confirmDeletion);
+    cancelDeleteBtn.addEventListener("click", closeModal);
+}
+
+function openModal(taskElement, taskText) {
+    elementToDelete = taskElement;
+    modalText.textContent = `Zadanie: "${taskText}"`;
+    modalElement.style.display = "flex";
+}
+
+function closeModal() {
+    modalElement.style.display = "none";
+    elementToDelete = null;
+}
+
+function confirmDeletion() {
+    if (elementToDelete) {
+        lastDeleted = {
+            element: elementToDelete,
+            parent: elementToDelete.parentElement,
+            nextSibling: elementToDelete.nextElementSibling
+        };
+        elementToDelete.remove();
+    }
+    closeModal();
+}
+
+function initializeUndoShortcut() {
+    document.addEventListener("keydown", (e) => {
+        const isUndo = (e.ctrlKey || e.metaKey) && e.key === "z";
+        if (isUndo) {
+            e.preventDefault();
+            undoLastDeletion();
+        }
+    });
+}
+
+function undoLastDeletion() {
+    if (lastDeleted && lastDeleted.element) {
+        const { element, parent, nextSibling } = lastDeleted;
+        if (nextSibling) {
+            parent.insertBefore(element, nextSibling);
+        } else {
+            parent.appendChild(element);
+        }
+        lastDeleted = null;
+    }
 }
