@@ -113,6 +113,8 @@ article {
   display: flex;
   align-items: center;
   gap: 1rem;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .book-details {
@@ -221,4 +223,37 @@ input[type="radio"]::before {
 
 .book-form button:hover {
   background-color: var(--dark-mint-green);
+}
+
+.book-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.action-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.edit-button {
+  background-color: var(--pastel-purple);
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: var(--blue-accent);
+}
+
+.delete-button {
+  background-color: var(--soft-error);
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: var(--dark-soft-error);
 }
