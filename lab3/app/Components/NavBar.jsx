@@ -8,8 +8,8 @@ export default function NavBar() {
           Mocna Księga
         </Link>
         <div className="nav-links">
-          <Link to="/" className="nav-link">
-            Strona główna
+          <Link to="/new" className="nav-link">
+            Dodaj książkę
           </Link>
           <button className="nav-link login-button">
             Zaloguj się

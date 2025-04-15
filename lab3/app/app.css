@@ -186,3 +186,39 @@ input[type="radio"]::before {
   top: 0;
   left: 0;
 }
+
+.book-form {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.book-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--mint-green);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.book-form button:hover {
+  background-color: var(--dark-mint-green);
+}
