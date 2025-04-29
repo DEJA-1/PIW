@@ -6,9 +6,16 @@ export const BooksContext = createContext();
 
 const useBooksQuery = (showMyBooks) => {
   const booksRef = collection(db, "books");
-  return showMyBooks && auth.currentUser
-    ? query(booksRef, where("userId", "==", auth.currentUser.uid))
-    : booksRef;
+  let q = query(booksRef, where("deleted", "!=", true));
+  
+  if (showMyBooks && auth.currentUser) {
+    q = query(booksRef, 
+      where("userId", "==", auth.currentUser.uid),
+      where("deleted", "!=", true)
+    );
+  }
+  
+  return q;
 };
 
 const useBooksSnapshot = (showMyBooks, setBookList) => {
@@ -39,7 +46,8 @@ export const BooksProvider = ({ children }) => {
       
       await addDoc(collection(db, "books"), {
         ...book,
-        userId: user.uid
+        userId: user.uid,
+        deleted: false
       });
     } catch (error) {
       console.error("Error adding book:", error);
