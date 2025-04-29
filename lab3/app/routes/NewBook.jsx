@@ -11,7 +11,7 @@ export function meta() {
 
 export default function NewBook() {
   const navigate = useNavigate();
-  const { setBookList } = useContext(BooksContext);
+  const { addBook } = useContext(BooksContext);
   const [formData, setFormData] = useState({
     title: "",
     author: "",
@@ -20,14 +20,9 @@ export default function NewBook() {
 
   const genres = ["fantasy", "epic", "novel", "psychological", "dystopian"];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newBook = {
-      id: Date.now(),
-      ...formData
-    };
-    
-    setBookList(prev => [...prev, newBook]);
+    await addBook(formData);
     navigate("/");
   };
 

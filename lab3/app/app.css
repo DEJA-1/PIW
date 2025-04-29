@@ -257,3 +257,26 @@ input[type="radio"]::before {
 .delete-button:hover {
   background-color: var(--dark-soft-error);
 }
+
+.my-books-button {
+  background-color: var(--pastel-purple);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.my-books-button:hover {
+  background-color: var(--blue-accent);
+  transform: translateY(-1px);
+}
+
+.my-books-button.active {
+  background-color: var(--blue-accent);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

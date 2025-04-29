@@ -49,6 +49,15 @@ export default function Home() {
             <option key={genre} value={genre}>{genre}</option>
           ))}
         </select>
+
+        {context?.currentUser && (
+          <button 
+            className={`my-books-button ${context.showMyBooks ? 'active' : ''}`}
+            onClick={() => context.setShowMyBooks(!context.showMyBooks)}
+          >
+            MOJE
+          </button>
+        )}
       </div>
 
       {bookListHTML}
