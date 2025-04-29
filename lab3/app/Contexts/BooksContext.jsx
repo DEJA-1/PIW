@@ -22,6 +22,7 @@ export const BooksProvider = ({ children }) => {
   const [bookList, setBookList] = useState([]);
   const [showMyBooks, setShowMyBooks] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -31,6 +32,7 @@ export const BooksProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     const q = useBooksQuery(showMyBooks);
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const books = snapshot.docs.map(doc => ({
@@ -38,6 +40,7 @@ export const BooksProvider = ({ children }) => {
         ...doc.data()
       }));
       setBookList(books);
+      setIsLoading(false);
     });
 
     return () => unsubscribe();
@@ -72,8 +75,9 @@ export const BooksProvider = ({ children }) => {
     editBook,
     showMyBooks,
     setShowMyBooks,
-    currentUser
-  }), [bookList, addBook, editBook, showMyBooks, currentUser]);
+    currentUser,
+    isLoading
+  }), [bookList, addBook, editBook, showMyBooks, currentUser, isLoading]);
 
   return (
     <BooksContext.Provider value={value}>
