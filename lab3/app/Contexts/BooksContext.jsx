@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useCallback } from "react";
+import { createContext, useState, useEffect, useCallback, useMemo } from "react";
 import { collection, query, where, onSnapshot, addDoc, updateDoc, doc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 
@@ -18,7 +18,18 @@ const useBooksQuery = (showMyBooks) => {
   return q;
 };
 
-const useBooksSnapshot = (showMyBooks, setBookList) => {
+export const BooksProvider = ({ children }) => {
+  const [bookList, setBookList] = useState([]);
+  const [showMyBooks, setShowMyBooks] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
   useEffect(() => {
     const q = useBooksQuery(showMyBooks);
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -30,29 +41,21 @@ const useBooksSnapshot = (showMyBooks, setBookList) => {
     });
 
     return () => unsubscribe();
-  }, [showMyBooks, auth.currentUser]);
-};
-
-export const BooksProvider = ({ children }) => {
-  const [bookList, setBookList] = useState([]);
-  const [showMyBooks, setShowMyBooks] = useState(false);
-
-  useBooksSnapshot(showMyBooks, setBookList);
+  }, [showMyBooks, currentUser]);
 
   const addBook = useCallback(async (book) => {
     try {
-      const user = auth.currentUser;
-      if (!user) throw new Error("User not authenticated");
+      if (!currentUser) throw new Error("User not authenticated");
       
       await addDoc(collection(db, "books"), {
         ...book,
-        userId: user.uid,
+        userId: currentUser.uid,
         deleted: false
       });
     } catch (error) {
       console.error("Error adding book:", error);
     }
-  }, []);
+  }, [currentUser]);
 
   const editBook = useCallback(async (id, updatedBook) => {
     try {
@@ -63,14 +66,14 @@ export const BooksProvider = ({ children }) => {
     }
   }, []);
 
-  const value = {
+  const value = useMemo(() => ({
     bookList,
     addBook,
     editBook,
     showMyBooks,
     setShowMyBooks,
-    currentUser: auth.currentUser
-  };
+    currentUser
+  }), [bookList, addBook, editBook, showMyBooks, currentUser]);
 
   return (
     <BooksContext.Provider value={value}>

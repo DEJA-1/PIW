@@ -1,11 +1,15 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { BooksContext } from "../Contexts/BooksContext";
 
 export default function Book({ book }) {
   const navigate = useNavigate();
   const { editBook, currentUser } = useContext(BooksContext);
-  const isOwner = currentUser && book.userId === currentUser.uid;
+  
+  const isOwner = useMemo(() => 
+    currentUser && book.userId === currentUser.uid,
+    [currentUser, book.userId]
+  );
 
   const handleEdit = () => {
     navigate(`/edit/${book.id}`);
